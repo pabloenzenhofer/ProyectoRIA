@@ -2,6 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+function assetPath(path: string | null) {
+  if (!path) return undefined;
+  const base = typeof document === "undefined"
+    ? ""
+    : document.documentElement.dataset.assetBase ?? "";
+
+  return `${base}${path}`;
+}
+
 const chapterData = [
   {
     id: "intro",
@@ -781,7 +790,7 @@ export default function Home() {
                 </button>
               </div>
               <button className="infographic-frame" onClick={() => setZoomed(true)} aria-label={`Ver ampliada: ${chapter.title}`}>
-                <img src={chapter.image} alt={`Página ${chapter.page}: ${chapter.title}`} />
+                <img src={assetPath(chapter.image)} alt={`Página ${chapter.page}: ${chapter.title}`} />
               </button>
             </article>
           )}
@@ -800,8 +809,8 @@ export default function Home() {
               <video
                 ref={activeVideoRef}
                 className={chapter.page === null ? "lesson-video intro-video" : "lesson-video"}
-                src={chapter.video}
-                poster={chapter.video.replace("/videos/", "/posters/").replace(".mp4", ".jpg")}
+                src={assetPath(chapter.video)}
+                poster={assetPath(chapter.video.replace("/videos/", "/posters/").replace(".mp4", ".jpg"))}
                 controls
                 playsInline
                 preload={autoAdvance ? "auto" : "metadata"}
@@ -872,7 +881,7 @@ export default function Home() {
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
           </button>
           <div className="zoom-scroll" onClick={() => setZoomed(false)}>
-            <img onClick={(event) => event.stopPropagation()} src={chapter.image} alt={`Página ${chapter.page}: ${chapter.title}`} />
+            <img onClick={(event) => event.stopPropagation()} src={assetPath(chapter.image)} alt={`Página ${chapter.page}: ${chapter.title}`} />
           </div>
         </div>
       )}
